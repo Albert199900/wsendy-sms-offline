@@ -1,0 +1,19 @@
+import android.telephony.SmsManager
+import android.telephony.SubscriptionManager
+import android.content.Context
+
+fun tumaSMSKupitiaLaini(context: Context, namba: String, ujumbe: String, simSlot: Int) {
+    val subscriptionManager = context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE) as SubscriptionManager
+    
+    // Kupata list ya laini zilizopo kwenye simu (SIM 1, SIM 2)
+    val activeSubscriptions = subscriptionManager.activeSubscriptionInfoList
+    
+    if (activeSubscriptions != null && activeSubscriptions.size > simSlot) {
+        val subscriptionInfo = activeSubscriptions[simSlot]
+        // Kupata SmsManager maalum ya hiyo laini iliyochaguliwa
+        val smsManager = SmsManager.getSmsManagerForSubscriptionId(subscriptionInfo.subscriptionId)
+        
+        // Tuma SMS yenyewe
+        smsManager.sendTextMessage(namba, null, ujumbe, null, null)
+    }
+}
