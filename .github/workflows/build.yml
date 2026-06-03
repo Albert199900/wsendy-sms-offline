@@ -108,7 +108,7 @@ jobs:
                           if (isDarkMode) {
                               layout.setBackgroundColor(Color.parseColor("#121212"));
                               title.setTextColor(Color.WHITE);
-                              status.setTextColor(Color.LTGRAY); // Rangi imesahihishwa hapa kuwa LTGRAY
+                              status.setTextColor(Color.YELLOW);
                           } else {
                               layout.setBackgroundColor(Color.WHITE);
                               title.setTextColor(Color.BLACK);
@@ -120,11 +120,11 @@ jobs:
           }
           EOF
 
-      - name: Fua APK ya Release
-        run: gradle assembleRelease --no-daemon
+      - name: Fua APK ya Debug (Inajisaini Yenyewe)
+        run: gradle assembleDebug --no-daemon
 
       - name: Toa APK kwa Albert
         uses: actions/upload-artifact@v4
         with:
           name: wsendy-java-apk
-          path: "app/build/outputs/apk/release/*.apk"
+          path: "app/build/outputs/apk/debug/*.apk"
