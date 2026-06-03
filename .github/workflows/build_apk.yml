@@ -22,7 +22,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          flutter-version: '3.22.0' # Kulazimisha toleo thabiti ili lisilete mgogoro
+          flutter-version: '3.22.0'
 
       - name: Tengeneza Muundo wa Android na Weka Ruhusa
         run: |
@@ -30,7 +30,7 @@ jobs:
           sed -i 's/<application/<uses-permission android:name="android.permission.SEND_SMS" \/>\n    <uses-permission android:name="android.permission.READ_PHONE_STATE" \/>\n    <uses-permission android:name="android.permission.INTERNET" \/>\n    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" \/>\n    <application/g' android/app/src/main/AndroidManifest.xml
 
       - name: Pakia Vifurushi vya Flutter
-        run: flutter pub get # Hapa tumerekebisha iwe flutter na si dart
+        run: flutter pub get
 
       - name: Jenga faili la APK
         run: flutter build apk --release
