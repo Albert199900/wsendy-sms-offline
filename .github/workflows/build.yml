@@ -1,0 +1,130 @@
+name: Jenga APK ya Java
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Vuta kodi kutoka GitHub
+        uses: actions/checkout@v4
+
+      - name: Weka Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Weka Mtambo wa Gradle 8.7
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.7'
+
+      - name: Kulazimisha Uundaji wa Folda na Mafile
+        run: |
+          mkdir -p app/src/main/java/com/wsendy/sms
+          
+          cat << 'EOF' > app/src/main/AndroidManifest.xml
+          <?xml version="1.0" encoding="utf-8"?>
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+              <uses-permission android:name="android.permission.SEND_SMS" />
+              <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+              <uses-permission android:name="android.permission.INTERNET" />
+              <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+              <application
+                  android:allowBackup="true"
+                  android:label="WSendy SMS Gateway"
+                  android:theme="@style/Theme.AppCompat.NoActionBar">
+                  <activity
+                      android:name="com.wsendy.sms.MainActivity"
+                      android:exported="true">
+                      <intent-filter>
+                          <action android:name="android.intent.action.MAIN" />
+                          <category android:name="android.intent.action.LAUNCHER" />
+                      </intent-filter>
+                  </activity>
+              </application>
+          </manifest>
+          EOF
+
+          cat << 'EOF' > app/src/main/java/com/wsendy/sms/MainActivity.java
+          package com.wsendy.sms;
+          
+          import android.os.Bundle;
+          import android.widget.Button;
+          import android.widget.LinearLayout;
+          import android.widget.TextView;
+          import android.graphics.Color;
+          import android.view.View;
+          import android.view.Gravity;
+          import androidx.appcompat.app.AppCompatActivity;
+
+          public class MainActivity extends AppCompatActivity {
+              private boolean isDarkMode = false;
+
+              @Override
+              protected void onCreate(Bundle savedInstanceState) {
+                  super.onCreate(savedInstanceState);
+
+                  final LinearLayout layout = new LinearLayout(this);
+                  layout.setOrientation(LinearLayout.VERTICAL);
+                  layout.setGravity(Gravity.CENTER);
+                  layout.setPadding(50, 50, 50, 50);
+                  layout.setBackgroundColor(Color.WHITE);
+
+                  final TextView title = new TextView(this);
+                  title.setText("WSendy SMS Gateway");
+                  title.setTextSize(24);
+                  title.setTextColor(Color.BLACK);
+                  title.setGravity(Gravity.CENTER);
+
+                  final TextView status = new TextView(this);
+                  status.setText("Hali ya Mfumo: ONLINE\nInasoma kutoka: https://wsendy.download");
+                  status.setTextSize(16);
+                  status.setTextColor(Color.GRAY);
+                  status.setGravity(Gravity.CENTER);
+                  status.setPadding(0, 40, 0, 40);
+
+                  Button btnTheme = new Button(this);
+                  btnTheme.setText("Badili Muonekano (Theme)");
+
+                  Button btnSend = new Button(this);
+                  btnSend.setText("Jaribu Kutuma SMS");
+
+                  layout.addView(title);
+                  layout.addView(status);
+                  layout.addView(btnTheme);
+                  layout.addView(btnSend);
+
+                  setContentView(layout);
+
+                  btnTheme.setOnClickListener(new View.OnClickListener() {
+                      @Override
+                      public void onClick(View v) {
+                          isDarkMode = !isDarkMode;
+                          if (isDarkMode) {
+                              layout.setBackgroundColor(Color.parseColor("#121212"));
+                              title.setTextColor(Color.WHITE);
+                              status.setTextColor(Color.LIGHTGRAY);
+                          } else {
+                              layout.setBackgroundColor(Color.WHITE);
+                              title.setTextColor(Color.BLACK);
+                              status.setTextColor(Color.GRAY);
+                          }
+                      }
+                  });
+              }
+          }
+          EOF
+
+      - name: Fua APK ya Release
+        run: gradle assembleRelease --no-daemon
+
+      - name: Toa APK kwa Albert
+        uses: actions/upload-artifact@v4
+        with:
+          name: wsendy-java-apk
+          path: "app/build/outputs/apk/release/*.apk"
