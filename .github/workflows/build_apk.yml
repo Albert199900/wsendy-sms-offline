@@ -1,0 +1,36 @@
+name: Tengeneza APK Kiwanda
+
+on:
+  push:
+    branches:
+      - main # Inafanya kazi ukisukuma kodi kwenye branch ya main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Vuta Kodi kutoka GitHub
+        uses: actions/checkout@v3
+
+      - name: Weka Java (Inahitajika kwa Android)
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Weka Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.x' # Au toleo lolote la sasa
+
+      - name: Pakia Vifurushi (Dependencies)
+        run: flutter pub get
+
+      - name: Jenga APK safi
+        run: flutter build apk --release
+
+      - name: Hifadhi faili la APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: wsendy-app
+          path: build/app/outputs/flutter-apk/app-release.apk
