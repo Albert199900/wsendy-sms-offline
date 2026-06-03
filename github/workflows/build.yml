@@ -22,10 +22,10 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
 
       - name: Fua APK ya Release
-        run: gradle assembleRelease
+        run: gradle assembleRelease --no-daemon
 
       - name: Toa APK kwa Albert
         uses: actions/upload-artifact@v4
         with:
           name: wsendy-java-apk
-          path: "**/build/outputs/apk/release/*.apk"
+          path: "app/build/outputs/apk/release/*.apk"
