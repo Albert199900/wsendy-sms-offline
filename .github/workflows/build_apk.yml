@@ -1,36 +1,42 @@
-name: Tengeneza APK Kiwanda
+name: Jenga APK Kiotomatiki
 
 on:
   push:
     branches:
-      - main # Inafanya kazi ukisukuma kodi kwenye branch ya main
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Vuta Kodi kutoka GitHub
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Weka Java (Inahitajika kwa Android)
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
-
-      - name: Weka Flutter
+          
+      - name: Weka Flutter SDK
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.x' # Au toleo lolote la sasa
+          channel: 'stable'
+          flutter-version: '3.22.0' # Kulazimisha toleo thabiti ili lisilete mgogoro
 
-      - name: Pakia Vifurushi (Dependencies)
-        run: flutter pub get
+      - name: Tengeneza Muundo wa Android na Weka Ruhusa
+        run: |
+          flutter create . --overwrite
+          sed -i 's/<application/<uses-permission android:name="android.permission.SEND_SMS" \/>\n    <uses-permission android:name="android.permission.READ_PHONE_STATE" \/>\n    <uses-permission android:name="android.permission.INTERNET" \/>\n    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" \/>\n    <application/g' android/app/src/main/AndroidManifest.xml
 
-      - name: Jenga APK safi
+      - name: Pakia Vifurushi vya Flutter
+        run: flutter pub get # Hapa tumerekebisha iwe flutter na si dart
+
+      - name: Jenga faili la APK
         run: flutter build apk --release
-
-      - name: Hifadhi faili la APK
+      
+      - name: Toa APK kwa Mtumiaji
         uses: actions/upload-artifact@v4
         with:
-          name: wsendy-app
+          name: wsendy-app-apk
           path: build/app/outputs/flutter-apk/app-release.apk
