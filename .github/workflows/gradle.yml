@@ -18,15 +18,15 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Weka Mtambo wa Gradle
+      - name: Weka Mtambo wa Gradle 8.7 (Toleo Thabiti)
         uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.7' # Hapa ndipo tulipoilainisha Gradle
 
-      - name: Kulazimisha Uundaji wa Folda na Mafile (Mbinu ya Kijeshi)
+      - name: Kulazimisha Uundaji wa Folda na Mafile
         run: |
-          # 1. Tengeneza muundo wa folda kwa nguvu
           mkdir -p app/src/main/java/com/wsendy/sms
           
-          # 2. Andika faili la AndroidManifest.xml kiotomatiki
           cat << 'EOF' > app/src/main/AndroidManifest.xml
           <?xml version="1.0" encoding="utf-8"?>
           <manifest xmlns:android="http://schemas.android.com/apk/res/android">
@@ -50,7 +50,6 @@ jobs:
           </manifest>
           EOF
 
-          # 3. Andika faili la MainActivity.java kiotomatiki
           cat << 'EOF' > app/src/main/java/com/wsendy/sms/MainActivity.java
           package com.wsendy.sms;
           
