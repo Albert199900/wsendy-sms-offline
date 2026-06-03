@@ -25,9 +25,24 @@ jobs:
 
       - name: Kulazimisha Uundaji wa Folda na Mafile
         run: |
+          # 1. Tengeneza folda za kodi na picha (resources)
           mkdir -p app/src/main/java/com/wsendy/sms
+          mkdir -p app/src/main/res/drawable
           
-          # Hapa tumeboresha Manifest kwa kuweka package na icon ya mfumo
+          # 2. Tengeneza picha/aikoni halisi ya kishindo kwa ajili ya Google Pixel
+          cat << 'EOF' > app/src/main/res/drawable/icon.xml
+          <vector xmlns:android="http://schemas.android.com/apk/res/android"
+              android:width="100dp"
+              android:height="100dp"
+              android:viewportWidth="24"
+              android:viewportHeight="24">
+              <path
+                  android:fillColor="#00FF00"
+                  android:pathData="M12,2C6.48,2 2,6.48 2,12s4.48,10 10,10 10,-4.48 10,-10S17.52,2 12,2z"/>
+          </vector>
+          EOF
+          
+          # 3. Andika Manifest inayosoma aikoni yetu mpya ya ndani (@drawable/icon)
           cat << 'EOF' > app/src/main/AndroidManifest.xml
           <?xml version="1.0" encoding="utf-8"?>
           <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -41,7 +56,7 @@ jobs:
               <application
                   android:allowBackup="true"
                   android:label="WSendy SMS Gateway"
-                  android:icon="@android:drawable/sym_def_app_icon"
+                  android:icon="@drawable/icon"
                   android:theme="@style/Theme.AppCompat.NoActionBar">
                   <activity
                       android:name=".MainActivity"
@@ -55,6 +70,7 @@ jobs:
           </manifest>
           EOF
 
+          # 4. Andika faili la MainActivity.java
           cat << 'EOF' > app/src/main/java/com/wsendy/sms/MainActivity.java
           package com.wsendy.sms;
           
