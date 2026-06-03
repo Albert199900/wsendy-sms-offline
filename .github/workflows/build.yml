@@ -108,7 +108,7 @@ jobs:
                           if (isDarkMode) {
                               layout.setBackgroundColor(Color.parseColor("#121212"));
                               title.setTextColor(Color.WHITE);
-                              status.setTextColor(Color.LIGHTGRAY);
+                              status.setTextColor(Color.LTGRAY); // Rangi imesahihishwa hapa kuwa LTGRAY
                           } else {
                               layout.setBackgroundColor(Color.WHITE);
                               title.setTextColor(Color.BLACK);
