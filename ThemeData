@@ -1,0 +1,13 @@
+// Theme ya Giza
+ThemeData darkTheme = ThemeData(
+  brightness: Brightness.dark,
+  primaryColor: Colors.blueGrey,
+  scaffoldBackgroundColor: Colors.black,
+);
+
+// Theme ya Mwangaza
+ThemeData lightTheme = ThemeData(
+  brightness: Brightness.light,
+  primaryColor: Colors.blue,
+  scaffoldBackgroundColor: Colors.white,
+);
